@@ -47,7 +47,7 @@ services:
       - db
       - ollama
     ports:
-      - 8080:8080
+      - 9090:8080
     volumes:
       - ./app:/usr/local/app:ro
     environment:
@@ -57,13 +57,13 @@ services:
       - DB_PASSWORD=1234
       - SESSION_TIMEOUT=60m
       - AI_HOST=http://ollama:11434/
-      - AI_MODEL=llama3.2:3b
+      - AI_MODEL=llama3.2-vision:11b
       - TZ=Asia/Seoul
       - LC_ALL:en_US.UTF-8
     networks:
       myNet:
         ipv4_address: 192.168.100.30
-    command: java -XX:UseSVE=0 -jar /usr/local/app/ai-1.jar
+    command: java -jar /usr/local/app/ai-1.jar
 
 networks:
   myNet:

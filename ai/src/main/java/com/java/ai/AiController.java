@@ -24,5 +24,6 @@ public class AiController {
     public String ai(@RequestBody AiReqDTO aiReqDTO) {
         return chatClient.prompt().user(aiReqDTO.getMsg()).call().content();
     }
+    
 
 }

@@ -1,24 +1,24 @@
 # SpringAI
 
-> [Spring AI ì•Œì•„ë³´ê¸°](https://docs.spring.io/spring-ai/reference/1.0/api/chat/ollama-chat.html)
+> [Spring AI ¾Ë¾Æº¸±â](https://docs.spring.io/spring-ai/reference/1.0/api/chat/ollama-chat.html)
 
-> [MARIADB ì•Œì•„ë³´ê¸°](https://mariadb.org/)
+> [MARIADB ¾Ë¾Æº¸±â](https://mariadb.org/)
 
-> [OLLAMA ì•Œì•„ë³´ê¸°](https://ollama.com)
+> [OLLAMA ¾Ë¾Æº¸±â](https://ollama.com)
 
-- [LLAMA3.2 ì•Œì•„ë³´ê¸°](https://ollama.com/library/llama3.2)
+- [LLAMA3.2 ¾Ë¾Æº¸±â](https://ollama.com/library/llama3.2)
 
-- [LLAMA3.2-VISION ì•Œì•„ë³´ê¸°](https://ollama.com/library/llama3.2-vision)
+- [LLAMA3.2-VISION ¾Ë¾Æº¸±â](https://ollama.com/library/llama3.2-vision)
 
 ---
 
-> [DOCKER ì•Œì•„ë³´ê¸°](https://docs.docker.com/?_gl=1*naramj*_gcl_au*MTQ2NzkxNjE1Ny4xNzM4ODg1NDk4*_ga*NTg3NjA3NTUzLjE3Mzg4ODU0OTg.*_ga_XJWPQMJYHQ*MTczODg4NTQ5OC4xLjEuMTczODg4NTQ5OC42MC4wLjA.)
+> [DOCKER ¾Ë¾Æº¸±â](https://docs.docker.com/?_gl=1*naramj*_gcl_au*MTQ2NzkxNjE1Ny4xNzM4ODg1NDk4*_ga*NTg3NjA3NTUzLjE3Mzg4ODU0OTg.*_ga_XJWPQMJYHQ*MTczODg4NTQ5OC4xLjEuMTczODg4NTQ5OC42MC4wLjA.)
 
-- [OLLAMA IMAGE ì•Œì•„ë³´ê¸°](https://hub.docker.com/r/ollama/ollama)
+- [OLLAMA IMAGE ¾Ë¾Æº¸±â](https://hub.docker.com/r/ollama/ollama)
 
-- [MARIADB IMAGE ì•Œì•„ë³´ê¸°](https://hub.docker.com/_/mariadb)
+- [MARIADB IMAGE ¾Ë¾Æº¸±â](https://hub.docker.com/_/mariadb)
 
-- [OPENJDK IMAGE ì•Œì•„ë³´ê¸°](https://hub.docker.com/_/openjdk)
+- [OPENJDK IMAGE ¾Ë¾Æº¸±â](https://hub.docker.com/_/openjdk)
 
 ## DOCKER COMPOSE
 
@@ -78,7 +78,7 @@ backend:
       - db
       - ollama
     ports:
-      - 8080:8080
+      - 9090:8080
     volumes:
       - ./app:/usr/local/app:ro
     environment:
@@ -122,7 +122,7 @@ ollama pull llama3.2-vision:11b
 
 ## SPRING APPLICATION SETTING
 
-- `application.yml` ì¤‘ ENV ê°€ì ¸ì˜¤ê¸°
+- `application.yml` Áß ENV °¡Á®¿À±â
 ```yml
 config:
     import: optional:file:env[.properties]
