@@ -2,20 +2,19 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI</title>
     <script>
         const btnEvent = () => {
-            fetch("http://localhost:8080/ai", {
+            fetch("http://localhost:8080/api/ai/send", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify({"msg": "í•œêµ­ì€ ì–´ë–¤ ë‚˜ë¼ì¸ê°€ìš”?"})
-                })
-                .then(response => response.text())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
+                body: JSON.stringify({ "msg": "ÇÑ±Û Å×½ºÆ® ¸Þ½ÃÁö" })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </head>
