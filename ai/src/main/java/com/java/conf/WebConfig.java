@@ -1,19 +1,24 @@
 package com.java.conf;
 
+import java.io.IOException;
+
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.filter.GenericFilterBean;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
-  
+public class WebConfig extends GenericFilterBean {
+    
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")  // ëª¨ë“  ê²½ë¡œì— ëŒ€í•´
-                .allowedOrigins("http://localhost:3000")  // React ì•±ì˜ ì£¼ì†Œ
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // í—ˆìš©í•  HTTP ë©”ì†Œë“œ
-                .allowedHeaders("*")  // ëª¨ë“  í—¤ë” í—ˆìš©
-                .allowCredentials(true);  // ìê²© ì¦ëª…(Credentials) í—ˆìš©
-    }
-
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+	        throws IOException, ServletException {
+		request.setCharacterEncoding("UTF-8");  // ¿äÃ» µ¥ÀÌÅÍ UTF-8 ¼³Á¤
+		response.setCharacterEncoding("UTF-8"); // ÀÀ´ä µ¥ÀÌÅÍ UTF-8 ¼³Á¤
+		response.setContentType("text/html; charset=UTF-8"); // ÀÀ´äÀÇ ÄÁÅÙÃ÷ Å¸ÀÔ ÁöÁ¤
+		chain.doFilter(request, response); // ´ÙÀ½ ÇÊÅÍ ¶Ç´Â ¼­ºí¸´ ½ÇÇà
+	}
 }

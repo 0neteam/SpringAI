@@ -1,12 +1,10 @@
 package com.java.ai;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000") // React °³¹ß ¼­¹ö¿ÍÀÇ CORS ¹®Á¦ ÇØ°á
 public class AiController {
     
     private final ChatClient chatClient;
@@ -15,15 +13,8 @@ public class AiController {
         this.chatClient = chatClient.build();
     }
 
-    @GetMapping("/")
-    public String home() {
-        return chatClient.prompt().user("ì•ˆë…•!").call().content();
+    @PostMapping("/search")
+    public String searchPrompt(@RequestBody AiReqDTO aiReqDTO) {
+        return chatClient.prompt().user("°Ë»ö ¿äÃ»: " + aiReqDTO.getMsg()).call().content();
     }
-
-    @PostMapping("/ai")
-    public String ai(@RequestBody AiReqDTO aiReqDTO) {
-        return chatClient.prompt().user(aiReqDTO.getMsg()).call().content();
-    }
-    
-
 }
