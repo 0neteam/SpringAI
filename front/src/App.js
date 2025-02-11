@@ -1,24 +1,24 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import SearchComponent from "./SearchComponent"; // SearchComponent ê°€ì ¸ì˜¤ê¸°
+import SearchComponent from "./SearchComponent"; // °Ë»ö ÀÔ·ÂÃ¢ ÄÄÆ÷³ÍÆ®
 
 function App() {
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-      {/* ë¡œê³  */}
-      <h2 className="mb-3">Prompt Search</h2>
+     
+      <h2 className="mb-3">ChatGPT</h2>
 
-      {/* ë©”ì¸ ì§ˆë¬¸ ë°•ìŠ¤ */}
-      <h3 className="fw-bold mb-3">ì›í•˜ëŠ” ì •ë³´ë¥¼ ê²€ìƒ‰í•˜ì„¸ìš”</h3>
+      
+      <h3 className="fw-bold mb-3">¹«¾ùÀ» µµ¿Íµå¸±±î¿ä?</h3>
 
-      {/* ê²€ìƒ‰ ì»´í¬ë„ŒíŠ¸ */}
+    
       <SearchComponent />
 
-      {/* ë¡œê·¸ì¸ & íšŒì›ê°€ì… ë²„íŠ¼ */}
+      
       <div className="position-absolute top-0 end-0 m-3 d-flex gap-2">
-        <Button variant="dark">ë¡œê·¸ì¸</Button>
-        <Button variant="outline-dark">íšŒì›ê°€ì…</Button>
+        <Button variant="dark">·Î±×ÀÎ</Button>
+        <Button variant="outline-dark">È¸¿ø°¡ÀÔ</Button>
       </div>
     </Container>
   );

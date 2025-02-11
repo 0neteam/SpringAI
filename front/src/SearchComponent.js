@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Button, Form, InputGroup, Container } from "react-bootstrap";
+import { Form, Button, InputGroup } from "react-bootstrap";
 
-const SearchComponent = () => {
-  const [query, setQuery] = useState("");
-  const [result, setResult] = useState("");
+function SearchComponent() {
+  const [input, setInput] = useState("");
+  const [response, setResponse] = useState("");
 
-  const searchPrompt = async () => {
-    if (!query.trim()) return;
+  const handleSearch = async () => {
+    if (!input.trim()) return;
 
     try {
       const res = await fetch("http://localhost:8080/search", {
@@ -14,40 +14,36 @@ const SearchComponent = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ msg: query }),
+        body: JSON.stringify({ msg: input }),
       });
 
       const data = await res.text();
-      setResult(data);
-      setQuery(""); // 입력 필드 초기화
+      setResponse(data);
     } catch (error) {
-      console.error("Error searching prompt:", error);
+      console.error("Error fetching response:", error);
     }
   };
 
   return (
-    <Container className="w-50">
-      {/* 검색 입력 필드 */}
-      <InputGroup className="mb-3">
+    <div className="w-50">
+      <InputGroup>
         <Form.Control
-          placeholder="검색어를 입력하세요"
-          aria-label="Prompt 검색"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          type="text"
+          placeholder="ChatGPT에게 메시지를 입력하세요"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
         />
-        <Button variant="dark" onClick={searchPrompt}>
-          검색
+        <Button variant="dark" onClick={handleSearch}>
+          전송
         </Button>
       </InputGroup>
-
-      {/* 검색 결과 출력 */}
-      {result && (
-        <div className="w-50 text-center mt-2 p-3 border rounded bg-light">
-          <strong>검색 결과:</strong> {result}
+      {response && (
+        <div className="mt-3 p-2 border rounded bg-light">
+          <strong>응답:</strong> {response}
         </div>
       )}
-    </Container>
+    </div>
   );
-};
+}
 
 export default SearchComponent;
