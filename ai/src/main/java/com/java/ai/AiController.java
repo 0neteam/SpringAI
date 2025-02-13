@@ -1,20 +1,40 @@
 package com.java.ai;
 
+import java.util.List;
+
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:3000") // React °³¹ß ¼­¹ö¿ÍÀÇ CORS ¹®Á¦ ÇØ°á
-public class AiController {
-    
-    private final ChatClient chatClient;
+import com.java.ai.entity.ChatHistory;
 
-    public AiController(ChatClient.Builder chatClient) {
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
+public class AiController {
+    private final ChatClient chatClient;
+    private final ChatHistoryRepository chatHistoryRepository;
+
+    public AiController(ChatClient.Builder chatClient, ChatHistoryRepository chatHistoryRepository) {
         this.chatClient = chatClient.build();
+        this.chatHistoryRepository = chatHistoryRepository;
     }
 
+    // AI ì‘ë‹µ ì²˜ë¦¬ ë° ëŒ€í™” ê¸°ë¡ ì €ì¥
     @PostMapping("/search")
-    public String searchPrompt(@RequestBody AiReqDTO aiReqDTO) {
-        return chatClient.prompt().user("°Ë»ö ¿äÃ»: " + aiReqDTO.getMsg()).call().content();
+    public CallResponseSpec searchPrompt(@RequestBody AiReqDTO aiReqDTO) {
+        String userMessage = aiReqDTO.getMsg();
+        CallResponseSpec botResponse = chatClient.prompt().user(userMessage).call();
+
+        // DBì— ì €ì¥
+        ChatHistory chatHistory = new ChatHistory(userMessage, botResponse);
+        chatHistoryRepository.save(chatHistory);
+
+        return botResponse;
+    }
+
+    // ìµœê·¼ 10ê°œ ëŒ€í™” ê¸°ë¡ ì¡°íšŒ API
+    @GetMapping("/history")
+    public List<ChatHistory> getChatHistory() {
+        return chatHistoryRepository.findTop10ByOrderByTimestampDesc();
     }
 }
