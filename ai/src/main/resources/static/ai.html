@@ -5,12 +5,12 @@
     <title>AI</title>
     <script>
         const btnEvent = () => {
-            fetch("http://localhost:8080/api/ai/send", {
+            fetch("http://localhost:8080/api/ai", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify({ "msg": "ÇÑ±Û Å×½ºÆ® ¸Þ½ÃÁö" })
+                body: JSON.stringify({ "msg": "ï¿½Ñ±ï¿½ ï¿½×½ï¿½Æ® ï¿½Þ½ï¿½ï¿½ï¿½" })
             })
             .then(response => response.text())
             .then(data => console.log(data))
