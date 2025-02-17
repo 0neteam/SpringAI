@@ -1,24 +1,21 @@
 package com.java.conf;
 
-import java.io.IOException;
-
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.filter.GenericFilterBean;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig extends GenericFilterBean {
-    
+@EnableWebMvc
+public class WebConfig implements WebMvcConfigurer {
+
     @Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
-	        throws IOException, ServletException {
-		request.setCharacterEncoding("UTF-8");  // ¿äÃ» µ¥ÀÌÅÍ UTF-8 ¼³Á¤
-		response.setCharacterEncoding("UTF-8"); // ÀÀ´ä µ¥ÀÌÅÍ UTF-8 ¼³Á¤
-		response.setContentType("text/html; charset=UTF-8"); // ÀÀ´äÀÇ ÄÁÅÙÃ÷ Å¸ÀÔ ÁöÁ¤
-		chain.doFilter(request, response); // ´ÙÀ½ ÇÊÅÍ ¶Ç´Â ¼­ºí¸´ ½ÇÇà
-	}
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // ëª¨ë“  ì—”ë“œí¬ì¸íŠ¸ì— ëŒ€í•´ CORS í—ˆìš©
+                .allowedOrigins("http://localhost:3000") // React ê°œë°œ ì„œë²„ í—ˆìš©
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
 }
