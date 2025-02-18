@@ -3,11 +3,11 @@ import { Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchComponent from "./SearchComponent"; // SearchComponent 가져오기
 
+
 function App() {
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-      {/* 로고 */}
-      <h2 className="mb-3">Prompt Search</h2>
+     
 
       {/* 메인 질문 박스 */}
       <h3 className="fw-bold mb-3">원하는 정보를 검색하세요</h3>
