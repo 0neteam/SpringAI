@@ -7,25 +7,52 @@ const SearchComponent = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
-  const [suggestions, setSuggestions] = useState([]); // 자동완성 추천 검색어
+  const [suggestions, setSuggestions] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
-  // 최근 검색어 불러오기
+  // 최근 검색어 & 즐겨찾기 불러오기
   useEffect(() => {
     const storedHistory = localStorage.getItem("searchHistory");
     if (storedHistory) {
       setSearchHistory(JSON.parse(storedHistory));
     }
+
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
   }, []);
 
-  // localStorage 업데이트 (최신 검색 기록 저장)
+  // 검색 기록 저장
   useEffect(() => {
     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
   }, [searchHistory]);
 
-  // 🔹 자동완성 API 호출 (입력값이 변경될 때 실행)
+  // 검색 기록 개별 삭제
+  const removeSearchHistory = (query) => {
+    const updatedHistory = searchHistory.filter((item) => item !== query);
+    setSearchHistory(updatedHistory);
+  };
+
+  // 즐겨찾기 추가
+  const addToFavorites = (query) => {
+    if (!query || favorites.includes(query)) return;
+    const updatedFavorites = [...favorites, query];
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  // 즐겨찾기 삭제
+  const removeFromFavorites = (query) => {
+    const updatedFavorites = favorites.filter((item) => item !== query);
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  // 자동완성 API 호출
   useEffect(() => {
     if (query.trim() === "") {
-      setSuggestions([]); // 검색어가 없으면 자동완성 리스트 초기화
+      setSuggestions([]);
       return;
     }
 
@@ -34,7 +61,7 @@ const SearchComponent = () => {
         const res = await fetch(`http://localhost:8080/suggest?query=${query}`);
         if (!res.ok) throw new Error("서버 오류");
         const data = await res.json();
-        setSuggestions(data); // 추천 검색어 리스트 저장
+        setSuggestions(data);
       } catch (error) {
         console.error("자동완성 오류:", error);
       }
@@ -43,9 +70,9 @@ const SearchComponent = () => {
     fetchSuggestions();
   }, [query]);
 
-  // 검색 실행 함수 (코드 블록 및 특수문자 제거 후 한글/영어 유지)
+  // 검색 실행 함수
   const searchPrompt = async (selectedQuery) => {
-    const searchQuery = selectedQuery || query; // 선택한 추천 검색어나 사용자가 입력한 검색어
+    const searchQuery = selectedQuery || query;
     if (!searchQuery.trim()) return;
 
     setLoading(true);
@@ -64,15 +91,10 @@ const SearchComponent = () => {
       if (!res.ok) throw new Error("서버 응답 오류 발생!");
 
       let data = await res.text();
-
-      // 🔹 코드 블록, 특수문자 제거 & 영어와 한글만 유지
       data = data.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\\/]/g, "").trim();
-
-      // 검색 결과 최대 6줄까지만 표시
       const formattedResult = data.split("\n").slice(0, 6).join("\n");
       setResult(formattedResult);
 
-      // 검색 기록 저장 (중복 제거)
       setSearchHistory((prevHistory) => {
         const updatedHistory = [searchQuery, ...prevHistory.filter((item) => item !== searchQuery)].slice(0, 5);
         return updatedHistory;
@@ -85,8 +107,8 @@ const SearchComponent = () => {
       setLoading(false);
     }
 
-    setQuery(""); // 입력 필드 초기화
-    setSuggestions([]); // 추천어 초기화
+    setQuery("");
+    setSuggestions([]);
   };
 
   return (
@@ -103,6 +125,9 @@ const SearchComponent = () => {
         <Button variant="dark" onClick={() => searchPrompt()} disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : "검색"}
         </Button>
+        <Button variant="warning" onClick={() => addToFavorites(query)} disabled={!query.trim()}>
+          ⭐ 즐겨찾기 추가
+        </Button>
 
         {/* 자동완성 추천 리스트 */}
         {suggestions.length > 0 && (
@@ -111,7 +136,7 @@ const SearchComponent = () => {
               <ListGroup.Item 
                 key={index} 
                 action 
-                onClick={() => searchPrompt(item)} // 선택 시 검색 실행
+                onClick={() => searchPrompt(item)}
               >
                 {item}
               </ListGroup.Item>
@@ -120,16 +145,16 @@ const SearchComponent = () => {
         )}
       </InputGroup>
 
-      {/* 검색 결과 (크기 증가 & 스크롤 추가) */}
+      {/* 검색 결과 */}
       {error && <Alert variant="danger">{error}</Alert>}
       {result && (
         <div className="text-center mt-2 p-4 border rounded bg-light w-100"
           style={{
-            maxHeight: "250px",  // 🔹 기존 150px → 250px (박스 크기 증가)
-            overflowY: "auto",   // 🔹 스크롤 가능하게 설정
+            maxHeight: "250px", 
+            overflowY: "auto",
             textAlign: "left",
-            whiteSpace: "pre-wrap", // 🔹 줄바꿈 유지
-            wordBreak: "break-word" // 🔹 긴 단어 자동 줄바꿈
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word"
           }}>
           <strong>검색 결과:</strong>
           <div>{result}</div>
@@ -142,13 +167,46 @@ const SearchComponent = () => {
           <h6 className="text-muted">최근 검색어</h6>
           <ul className="list-unstyled mb-0">
             {searchHistory.map((item, index) => (
-              <li 
-                key={index} 
-                className="text-primary" 
-                style={{ cursor: "pointer" }} 
-                onClick={() => searchPrompt(item)} // 선택 시 검색 실행
-              >
-                {item}
+              <li key={index} className="d-flex justify-content-between align-items-center">
+                <span 
+                  className="text-primary" 
+                  style={{ cursor: "pointer" }} 
+                  onClick={() => searchPrompt(item)}
+                >
+                  {item}
+                </span>
+                <Button 
+                  variant="danger" 
+                  size="sm" 
+                  onClick={() => removeSearchHistory(item)} 
+                  style={{ marginLeft: "10px" }} // 🔹 간격 조정
+                >
+                  🗑️
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* 즐겨찾기 목록 */}
+      {favorites.length > 0 && (
+        <div className="mt-3 p-2 border rounded bg-white">
+          <h6 className="text-muted">⭐ 즐겨찾기</h6>
+          <ul className="list-unstyled mb-0">
+            {favorites.map((item, index) => (
+              <li key={index} className="d-flex justify-content-between align-items-center">
+                <span className="text-primary" style={{ cursor: "pointer" }} onClick={() => searchPrompt(item)}>
+                  {item}
+                </span>
+                <Button 
+                  variant="danger" 
+                  size="sm" 
+                  onClick={() => removeFromFavorites(item)} 
+                  style={{ marginLeft: "10px" }} // 🔹 간격 조정
+                >
+                  ❌
+                </Button>
               </li>
             ))}
           </ul>
