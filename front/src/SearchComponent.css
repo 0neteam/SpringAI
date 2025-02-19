@@ -1,0 +1,50 @@
+/* ✅ 추천 검색어 스타일 추가 */
+.suggestions-box {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-container {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  .search-input {
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  .result-box {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+  }
+  
+  .history-box, .favorite-box {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .history-item, .favorite-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+  }
+  
+  .history-item span, 
+  .favorite-item span {
+    flex-grow: 1;
+    cursor: pointer;
+    color: #007bff;
+  }
+  
