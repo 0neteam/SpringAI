@@ -1,23 +1,20 @@
 package com.java.ai;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDateTime;
+
+import com.java.ai.model.Role;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User implements UserDetails {
-
+@AllArgsConstructor
+@Builder
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,30 +23,17 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String password; // 비밀번호는 암호화해서 저장 필요
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
+    @Column(unique = true)
+    private String email;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;  // 기본 역할
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @Column(nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

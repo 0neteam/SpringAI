@@ -1,8 +1,12 @@
 package com.java.ai;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username); // ✅ 올바른 Optional 사용 (java.util.Optional)
+    Optional<User> findByUsername(String username);
+    boolean existsByUsername(String username); // ✅ 중복 검사용
 }
