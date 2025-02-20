@@ -72,3 +72,6 @@ networks:
       config:
         - subnet: 192.168.100.0/24
           gateway: 192.168.100.254
+
+jwt:
+  secret: 8f2e41d98b2f47a0bba7b1f0d2b8c82f9a8e1cbe6a65c1a5f9d3c3a7e7d9b1e2      
