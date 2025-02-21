@@ -8,16 +8,18 @@
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.2.0",
     "react-scripts": "^5.0.1",
     "styled-components": "^5.0.0",
     "web-vitals": "^4.2.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+ "scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "serve": "serve -s build",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
